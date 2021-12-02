@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "863872732054",
+    "project_id": "trumbien",
+    "storage_bucket": "trumbien.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863872732054:android:3d84ba40da36d3dc30abb7",
+        "android_client_info": {
+          "package_name": "com.example.adminmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863872732054-ah056vc8o6gbpo32sol13nfmt832bm2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adminmanager",
+            "certificate_hash": "3ef7af1a70bc761236341cff75b08c1860dba680"
+          }
+        },
+        {
+          "client_id": "863872732054-8iq161v7pav8aplbj5e37nag3ga60554.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrZpW2DocuYspAPfq7FS8kK4nJl1U9Rew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863872732054-8iq161v7pav8aplbj5e37nag3ga60554.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
