@@ -3,12 +3,14 @@ package com.example.adminmanager.network
 import android.util.Log
 import com.example.adminmanager.network.login.Token
 import com.google.gson.Gson
+import entity.PackageOrder
 import java.io.BufferedReader
 import java.io.InputStream
 import java.math.BigInteger
 import java.net.URL
 import java.security.MessageDigest
 import javax.net.ssl.HttpsURLConnection
+
 
 object connection {
 
@@ -41,7 +43,7 @@ object connection {
 
     private fun sendRequest(sUrl: String, method: String, body: String): String? {
         val inputStream: InputStream
-        var result: String? = null
+        var result: String?
 
         try {
             val url = URL(sUrl)
@@ -81,7 +83,7 @@ object connection {
         return sendRequest(host + path, "POST")
     }
 
-    fun Login(userName: String, password: String): String? {
+    fun Login(userName: String, password: String): Boolean {
         val loginBody = "{\"username\":\"$userName\",\"password\":\"${md5(password)}\"}"
         val response = sendRequest(
             host + "auth/signin",
@@ -89,16 +91,19 @@ object connection {
             loginBody
         )
         response?.let {
-            val token = Gson().fromJson(it, Token::class.java)
-            Log.d("Testing data", token.token)
-            this.token = token.token
+            try {
+                val token = Gson().fromJson(it, Token::class.java)
+                Log.d("Testing data", token.token)
+                this.token = token.token
+            } catch (ex: Exception) {
+                this.token = null
+            }
         }
-
-        return response
+        return this.token != null
     }
 
-    fun GetAllOrder(): String? {
-        val queryBody = "{\"query\":\"ORDER\",\"page\":0,\"size\":100,\"filter\":\"30\"}"
+    fun GetAllOrder(status: PackageOrder.Status): String? {
+        val queryBody = "{\"query\":\"${status.getName()}\",\"page\":0,\"size\":100,\"filter\":\"30\"}"
         return sendRequest(
             host + "order/admin/all",
             "POST",

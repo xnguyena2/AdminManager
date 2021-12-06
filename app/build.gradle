@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation files('libs/model-1.0.jar')
 
 
     testImplementation 'junit:junit:4.+'

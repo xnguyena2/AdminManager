@@ -6,17 +6,45 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
 import androidx.navigation.fragment.findNavController
 import com.example.adminmanager.databinding.FragmentSecondBinding
+import com.example.adminmanager.network.login.Token
+import com.example.adminmanager.order.OrderAdapter
+import com.google.gson.Gson
+import entity.PackageOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import order.OrderSearchResult
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class SecondFragment : Fragment() {
+
+
+    init { // Notice that we can safely launch in the constructor of the Fragment.
+        lifecycleScope.launch {
+            whenStarted {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val result = com.example.adminmanager.network.connection.GetAllOrder(PackageOrder.Status.ORDER)
+                    val orders = Gson().fromJson(result, OrderSearchResult::class.java)
+                    Log.d("Testing data", "response: ${orders.result}")
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Success loading data!", Toast.LENGTH_LONG).show()
+                        //findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+                        binding.listOrder.adapter = context?.let {
+                            OrderAdapter(it, orders)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private var _binding: FragmentSecondBinding? = null
 
@@ -30,23 +58,12 @@ class SecondFragment : Fragment() {
     ): View? {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        return binding.root
 
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonSecond.setOnClickListener {
-
-            lifecycleScope.launch(Dispatchers.IO) {
-                val result = com.example.adminmanager.network.connection.GetAllOrder()
-                Log.d("Testing data", "response: $result")
-                withContext(Dispatchers.Main) {
-                    findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {

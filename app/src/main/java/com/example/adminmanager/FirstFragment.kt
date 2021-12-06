@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -41,10 +42,19 @@ class FirstFragment : Fragment() {
         binding.loginBtn.setOnClickListener {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val result = com.example.adminmanager.network.connection.Login("diep", "diep")
+                val result = com.example.adminmanager.network.connection.Login(
+                    binding.editTextTextPersonName.text.toString(),
+                    binding.editTextTextPassword.text.toString()
+                )
                 Log.d("Testing data", "response: $result")
-                withContext(Dispatchers.Main) {
-                    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                if (result) {
+                    withContext(Dispatchers.Main) {
+                        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Wrong username or password!", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
