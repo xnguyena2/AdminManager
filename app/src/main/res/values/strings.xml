@@ -26,4 +26,16 @@
 
     <string name="login_fragment_lbl">Login</string>
     <string name="orders_fragment_lbl">Đơn Hàng</string>
+
+    <string name="lbl_name">Tên</string>
+    <string name="lbl_phone">SDT</string>
+    <string name="lbl_city">Tỉnh/Thành Phố</string>
+    <string name="lbl_district">Quận/Huyện</string>
+    <string name="lbl_ward">Xã/Phường</string>
+    <string name="lbl_address">Địa Chỉ</string>
+    <string name="lbl_money">Tổng Tiền</string>
+
+
+    <string name="btn_success">Thành Công</string>
+    <string name="btn_cancel">Huỷ Đơn</string>
 </resources>

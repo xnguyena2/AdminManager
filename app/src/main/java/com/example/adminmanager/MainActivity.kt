@@ -38,8 +38,10 @@ class MainActivity : AppCompatActivity() {
             val channelId = getString(R.string.default_notification_channel_id)
             val channelName = getString(R.string.default_notification_channel_name)
             val notificationManager = getSystemService(NotificationManager::class.java)
-            val channel = NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+            val channel = NotificationChannel(
+                channelId,
+                channelName, NotificationManager.IMPORTANCE_HIGH
+            ).apply {
                 lightColor = Color.BLUE
                 enableLights(true)
                 enableVibration(true)
@@ -56,21 +58,6 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-
-                // Get new FCM registration token
-                val token = task.result
-
-                // Log and toast
-                val msg = getString(R.string.msg_token_fmt, token)
-                Log.d(TAG, msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            })
 //
 //            Firebase.messaging.token.addOnCompleteListener(OnCompleteListener { task ->
 //                if (!task.isSuccessful) {
@@ -87,9 +74,10 @@ class MainActivity : AppCompatActivity() {
 //                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //            })
 //
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+
+        registerFireBase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -129,6 +117,23 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
+    private fun registerFireBase(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because

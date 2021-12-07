@@ -111,6 +111,15 @@ object connection {
         )
     }
 
+    fun ChangeOrderStatus(id: String, status: PackageOrder.Status): String? {
+        val queryBody = "{\"id\":\"$id\",\"status\":\"${status.getName()}\"}"
+        return sendRequest(
+            host + "order/admin/close",
+            "POST",
+            queryBody
+        )
+    }
+
     fun md5(input: String): String {
         val md = MessageDigest.getInstance("MD5")
         return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')

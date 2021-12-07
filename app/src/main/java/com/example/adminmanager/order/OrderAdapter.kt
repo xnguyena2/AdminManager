@@ -1,15 +1,23 @@
 package com.example.adminmanager.order
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import com.example.adminmanager.MainActivity
+import com.example.adminmanager.OrderActivity
 import com.example.adminmanager.R
+import com.google.gson.Gson
 import order.OrderSearchResult
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
+import java.util.*
 
-class OrderAdapter(val context: Context, val orders: OrderSearchResult): BaseAdapter() {
+class OrderAdapter(val context: Context, val orders: OrderSearchResult, val intentLauncher: ActivityResultLauncher<Intent>): BaseAdapter() {
 
     override fun getCount(): Int = orders?.count?.toInt() ?: 0
 
@@ -28,7 +36,30 @@ class OrderAdapter(val context: Context, val orders: OrderSearchResult): BaseAda
         val price: TextView = view.findViewById(R.id.total_money)
 
         userName.text = orders!!.result[p0].reciver_fullname
-        price.text = orders!!.result[p0].real_price.toString()
+        val money = orders!!.result[p0].real_price
+
+
+        val format: NumberFormat = NumberFormat.getCurrencyInstance()
+        format.maximumFractionDigits = 0
+        format.currency = Currency.getInstance("VND")
+        price.text = format.format(money)
+
+        view.setOnClickListener {
+            val intent = Intent(context, OrderActivity::class.java)
+            intent.putExtra("order", Gson().toJson(orders!!.result[p0]))
+            intentLauncher.launch(intent)
+        }
         return view
+    }
+
+    fun update(id: String) {
+        val removedItem = orders.result.find {
+            it.package_order_second_id == id
+        }
+        removedItem?.let {
+            orders.result.remove(it)
+            orders.count--
+            notifyDataSetChanged()
+        }
     }
 }
